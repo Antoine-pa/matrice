@@ -43,7 +43,10 @@ class Matrice:
             t2 = [[] for _ in range(len(self.matrice))]
             for i in range(len(self.matrice)):
                 for el in self.matrice[i]:
-                    t2[i].append(el*other)
+                    r = el*other
+                    if r%1==0:
+                        r=int(r)
+                    t2[i].append(r)
             return Matrice(t2)
 
 
@@ -58,6 +61,8 @@ class Matrice:
                     el = 0
                     for i3 in range(d1[1]):
                         el += self.matrice[i][i3]*other.matrice[i3][i2]
+                    if el%1==0:
+                        el = int(el)
                     t2[i][i2] = el
             return Matrice(t2)
         raise ValueError("bad argument")
@@ -85,7 +90,7 @@ class Matrice:
         return self._calc(other, "-")
 
     def det(self):
-        assert len(self.matrice) == len(self.matrice[1])
+        assert len(self.matrice) == len(self.matrice[0])
         if len(self.matrice) > 2:
             s = 0
             for i in range(len(self.matrice)):
@@ -102,7 +107,11 @@ class Matrice:
                     s-=self.matrice[0][i]*d
                 else:
                     s+=self.matrice[0][i]*d
+            if s%1 == 0:
+                s=int(s)
             return s
+        elif len(self.matrice) == len(self.matrice[0]) == 1:
+            return self.matrice[0][0]
         else:
             return self.matrice[0][0] * self.matrice[1][1] - self.matrice[0][1] * self.matrice[1][0]
         
@@ -120,38 +129,42 @@ class Matrice:
         for y in range(len(self.matrice)):
             for x in range(len(self.matrice[0])):
                 l[x][y] = self.matrice[y][x]
-        self.matrice = l
-        return self
+        return Matrice(l)
     
-    def adj(self):
-        l = self.l_empty()
-        for y in range(len(self.matrice)):
-            for x in range(len(self.matrice[0])):
-                l_mineure = self.l_empty(-1, -1)
-                for line in range(len(self.matrice)):
-                    for el in range(len(self.matrice[0])):
+    def cofacteur(self):
+        matrice = self.transpose()
+        l = matrice.l_empty()
+        for y in range(len(matrice.matrice)):
+            for x in range(len(matrice.matrice[0])):
+                l_mineure = matrice.l_empty(-1, -1)
+                for line in range(len(matrice.matrice)):
+                    for el in range(len(matrice.matrice[0])):
                         if line != y and el != x:
                             if line < y:
                                 if el < x:
-                                    l_mineure[line][el] = self.matrice[line][el]
+                                    l_mineure[line][el] = matrice.matrice[line][el]
                                 else:
-                                    l_mineure[line][el-1] = self.matrice[line][el]
+                                    l_mineure[line][el-1] = matrice.matrice[line][el]
                             else:
                                 if el < x:
-                                    l_mineure[line+1][el] = self.matrice[line][el]
+                                    l_mineure[line-1][el] = matrice.matrice[line][el]
                                 else:
-                                    l_mineure[line+1][el-1] = self.matrice[line][el]
+                                    l_mineure[line-1][el-1] = matrice.matrice[line][el]
                     
-                print(l_mineure)
-
+                m_mineure=Matrice(l_mineure)
+                l[y][x]=m_mineure.det()
+        return Matrice(l)
+    
+    def adj(self):
+        matrice = self.cofacteur()
+        for y in range(len(matrice.matrice)):
+            for x in range(len(matrice.matrice[0])):
+                matrice.matrice[x][y] *= (-1)**(x+y)
+        return matrice
+    
+    def inverse(self):
+        return self.adj()*(1/self.det())
 m = Matrice([[1, 2, 3], [3, 4, 5]])
 m2 = Matrice([[5, 6], [7, 8], [1, 2]])
-"""
-print(m)
-print(m2)
-print(m*m2)
-print(m2*m)
-"""
-m3 = Matrice([[1, 2, 3], [0, 1, 4], [5, 6, 0]])
-print(m3.transpose())
-print(m3.adj())
+m3 = Matrice([[1, 2], [3, 4]])
+print(m3.inverse())
