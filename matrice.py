@@ -7,7 +7,8 @@ class Matrice:
         matrice_str = []
         for line in self.matrice:
             matrice_str.append(list(map(str, line)))
-
+        if len(self.matrice) == 1:
+            return "[ " + " ".join([str(self.matrice[0][n]) for n in range(len(self.matrice[0]))]) + " ]\n"+str(self.dimension())+"\n"
         long_col = []
         for i in range(len(self.matrice[0])):
             l = []
@@ -131,7 +132,9 @@ class Matrice:
                 l[x][y] = self.matrice[y][x]
         return Matrice(l)
     
-    def cofacteur(self):
+    def comatrice(self):
+        if len(self.matrice) == len(self.matrice[0]) == 1:
+            return Matrice([[1]]) #Id
         matrice = self.transpose()
         l = matrice.l_empty()
         for y in range(len(matrice.matrice)):
@@ -156,15 +159,16 @@ class Matrice:
         return Matrice(l)
     
     def adj(self):
-        matrice = self.cofacteur()
+        matrice = self.comatrice()
         for y in range(len(matrice.matrice)):
             for x in range(len(matrice.matrice[0])):
                 matrice.matrice[x][y] *= (-1)**(x+y)
         return matrice
     
     def inverse(self):
-        return self.adj()*(1/self.det())
-m = Matrice([[1, 2, 3], [3, 4, 5]])
-m2 = Matrice([[5, 6], [7, 8], [1, 2]])
-m3 = Matrice([[1, 2], [3, 4]])
-print(m3.inverse())
+        d = self.det()
+        if d == 0:
+            return False
+        return self.adj()*(1/d)
+    
+print(Matrice([[0, 5, 6]]))
