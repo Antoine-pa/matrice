@@ -1,4 +1,23 @@
 class Matrice:
+    """
+    une classe permettant de représenter une matrice et d'effectuer des cacluls dessus.
+    attributs:
+        matrice: un tableau (liste de liste)
+    méthodes:
+        dimension(): renvoie les dimensions de la matrice sous forme de tuple
+        det(): renvoie le déterminant de la matrice si elle est carrée
+        transpose(): renvoie la matrice transposée de la matrice sous forme d'un nouvel objet
+        comatrice(): renvoie la comatrice de la matrice sous forme d'un nouvel objet
+        adj(): renvoie la matrice adjacente de la matrice sous forme d'un nouvel objet
+        inverse(): renvoie la matrice inverse si elle est inversible osus forme d'un nouvel objet
+        l_empty(x, y): renvoie un tableau vide dimension de la matrice + x et y
+    méthodes spéciales:
+        __str__(): renvoie la représentation de la matrice
+        __mul__(other): renvoie la multiplication de la matrice par une autre matrice ou un nombre si c'est possible sous forme d'un nouvel objet
+        _calc(other, op): renvoie l'addition ou la soustraction en fonction de op entre la matrice et other si c'est possible sous forme d'un nouvel objet
+        __add__(other): appelle _calc pour faire l'addition et renvoie son résultat
+        __sub__(other): appelle _calc pour faire la soustraction et renvoie son résultat
+    """
     def __init__(self, t):
         self.matrice = t
 
@@ -36,7 +55,7 @@ class Matrice:
                 ret += " | \n"
         return ret[:-2]+"\n"+str(self.dimension())+"\n"
 
-    def dimension(self):
+    def dimension(self) -> tuple:
         return (len(self.matrice), len(self.matrice[0]))
 
     def __mul__(self, other):
@@ -90,7 +109,7 @@ class Matrice:
     def __sub__(self, other):
         return self._calc(other, "-")
 
-    def det(self):
+    def det(self) -> int:
         assert len(self.matrice) == len(self.matrice[0])
         if len(self.matrice) > 2:
             s = 0
@@ -116,7 +135,7 @@ class Matrice:
         else:
             return self.matrice[0][0] * self.matrice[1][1] - self.matrice[0][1] * self.matrice[1][0]
         
-    def l_empty(self, x = None, y = None):
+    def l_empty(self, x = None, y = None) -> list:
         if x is None and y is None:
             x = len(self.matrice[0])
             y = len(self.matrice)
