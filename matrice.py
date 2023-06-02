@@ -1,3 +1,6 @@
+import numpy as np
+import numbers
+
 class Matrice:
     """
     une classe permettant de représenter une matrice et d'effectuer des cacluls dessus.
@@ -34,7 +37,8 @@ class Matrice:
     def __init__(self, tab: list):
         for l in tab:
             for el in l:
-                if not isinstance(el, int) and not isinstance(el, float):
+                if not isinstance(el, numbers.Number):
+                    print(type(el))
                     raise ValueError("The list does not only contain numbers.")
         self.matrice = tab
         self.adj = self.adjacente
@@ -205,7 +209,7 @@ class Matrice:
             for x in range(len(matrice.matrice[0])):
                 matrice.matrice[x][y] *= (-1)**(x+y)
         return matrice
-    
+    '''
     def comatrice(self):
         """
         Méthode renvoyant la comatrice de la matrice
@@ -234,6 +238,13 @@ class Matrice:
                 m_mineure=Matrice(l_mineure)
                 l[y][x]=m_mineure.det()
         return Matrice(l)
+        '''
+    def cofacteur(self, i, j):
+        matrice = Matrice(np.delete(np.delete(self.matrice, i, axis = 0), j, axis = 1))
+        return matrice.det() * (-1)**(i+j)
+
+    def comatrice2(self):
+        return Matrice([[self.cofacteur(i, j) for j in  range(len(self.matrice[0]))] for i in range(len(self.matrice))])
         
     def copy(self):
         return Matrice(self.matrice)
