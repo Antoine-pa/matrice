@@ -1,0 +1,5 @@
+Gauss jordan
+Rang
+Autovaleur et base d'autovecteur
+Diagonalisation
+Sarrus     Done
