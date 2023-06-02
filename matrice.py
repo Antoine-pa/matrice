@@ -244,7 +244,7 @@ class Matrice:
         """
         if not len(self.matrice) == len(self.matrice[0]):
             raise ArithmeticError("non square matrix")
-        if len(self.matrice) > 2:
+        if len(self.matrice) > 3:
             s = 0
             for i in range(len(self.matrice)):
                 m = [[0]*(len(self.matrice)-1) for _ in range(len(self.matrice)-1)]
@@ -263,6 +263,16 @@ class Matrice:
             if s%1 == 0:
                 s=int(s)
             return s
+        elif len(self.matrice) == len(self.matrice[0]) == 3: #sarrus
+            p = [self.matrice[0][0] * self.matrice[1][1] * self.matrice[2][2], 
+                 self.matrice[1][0] * self.matrice[2][1] * self.matrice[0][2],
+                 self.matrice[2][0] * self.matrice[0][1] * self.matrice[1][2]
+            ]
+            n = [self.matrice[0][0] * self.matrice[1][2] * self.matrice[2][1], 
+                 self.matrice[1][0] * self.matrice[0][1] * self.matrice[2][2],
+                 self.matrice[2][0] * self.matrice[1][1] * self.matrice[0][2]
+            ]
+            return sum(p)-sum(n)
         elif len(self.matrice) == len(self.matrice[0]) == 1:
             return self.matrice[0][0]
         else:
