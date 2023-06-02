@@ -332,12 +332,9 @@ class Matrice:
         """
         Methode renvoyant la matrice transposée de la matrice
         """
-        l = self.l_empty()
-        for y in range(len(self.matrice)):
-            for x in range(len(self.matrice[0])):
-                l[x][y] = self.matrice[y][x]
-        return Matrice(l)
+        return Matrice(list(map(list, zip(*self.matrice))))
 
+#    def 
     def _calc(self, other, op):
         """
         Méthode privée permetant d'additionner ou soustraire une matrice à une autre
