@@ -1,3 +1,6 @@
+import numpy as np
+import numbers
+
 class Matrice:
     """
     une classe permettant de représenter une matrice et d'effectuer des cacluls dessus.
@@ -34,7 +37,8 @@ class Matrice:
     def __init__(self, tab: list):
         for l in tab:
             for el in l:
-                if not isinstance(el, int) and not isinstance(el, float):
+                if not isinstance(el, numbers.Number):
+                    print(type(el))
                     raise ValueError("The list does not only contain numbers.")
         self.matrice = tab
         self.adj = self.adjacente
@@ -205,7 +209,7 @@ class Matrice:
             for x in range(len(matrice.matrice[0])):
                 matrice.matrice[x][y] *= (-1)**(x+y)
         return matrice
-    
+    '''
     def comatrice(self):
         """
         Méthode renvoyant la comatrice de la matrice
@@ -234,6 +238,13 @@ class Matrice:
                 m_mineure=Matrice(l_mineure)
                 l[y][x]=m_mineure.det()
         return Matrice(l)
+        '''
+    def cofacteur(self, i, j):
+        matrice = Matrice(np.delete(np.delete(self.matrice, i, axis = 0), j, axis = 1))
+        return matrice.det() * (-1)**(i+j)
+
+    def comatrice2(self):
+        return Matrice([[self.cofacteur(i, j) for j in  range(len(self.matrice[0]))] for i in range(len(self.matrice))])
         
     def copy(self):
         return Matrice(self.matrice)
@@ -244,7 +255,7 @@ class Matrice:
         """
         if not len(self.matrice) == len(self.matrice[0]):
             raise ArithmeticError("non square matrix")
-        if len(self.matrice) > 2:
+        if len(self.matrice) > 3:
             s = 0
             for i in range(len(self.matrice)):
                 m = [[0]*(len(self.matrice)-1) for _ in range(len(self.matrice)-1)]
@@ -263,6 +274,16 @@ class Matrice:
             if s%1 == 0:
                 s=int(s)
             return s
+        elif len(self.matrice) == len(self.matrice[0]) == 3: #sarrus
+            p = [self.matrice[0][0] * self.matrice[1][1] * self.matrice[2][2], 
+                 self.matrice[1][0] * self.matrice[2][1] * self.matrice[0][2],
+                 self.matrice[2][0] * self.matrice[0][1] * self.matrice[1][2]
+            ]
+            n = [self.matrice[0][0] * self.matrice[1][2] * self.matrice[2][1], 
+                 self.matrice[1][0] * self.matrice[0][1] * self.matrice[2][2],
+                 self.matrice[2][0] * self.matrice[1][1] * self.matrice[0][2]
+            ]
+            return sum(p)-sum(n)
         elif len(self.matrice) == len(self.matrice[0]) == 1:
             return self.matrice[0][0]
         else:
@@ -322,12 +343,9 @@ class Matrice:
         """
         Methode renvoyant la matrice transposée de la matrice
         """
-        l = self.l_empty()
-        for y in range(len(self.matrice)):
-            for x in range(len(self.matrice[0])):
-                l[x][y] = self.matrice[y][x]
-        return Matrice(l)
+        return Matrice(list(map(list, zip(*self.matrice))))
 
+#    def 
     def _calc(self, other, op):
         """
         Méthode privée permetant d'additionner ou soustraire une matrice à une autre
