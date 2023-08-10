@@ -55,8 +55,3 @@ class Solveur:
     
     def print_eq(self, lA, lR, eq, n):
         print("".join([f"{'+' if (lA[eq][nb] > 0 and nb !=0) else ''}"+(str(lA[eq][nb]) if abs(lA[eq][nb]) != 1 else ("-" if lA[eq][nb] == -1 else ""))+self._var[nb] for nb in range(n)]) + "=" + str(lR[eq][0]))
-        
-        
-                
-                
-Solveur()

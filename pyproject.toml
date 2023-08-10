@@ -1,0 +1,21 @@
+[project]
+name = "matrice_antoine"
+version = "1.0.0"
+description = "petite module de calcul matriciel"
+readme = "README.md"
+license = {file = "LICENSE.txt"}
+authors = [
+    {name = "Antoine", email = "antoine.pascal@gmx.fr"},
+]
+
+classifiers = [
+    "Private :: Do Not Upload",
+]
+
+dependencies = [
+    "numpy",
+]
+
+[build-system]
+requires = ["setuptools>=61.0", "wheel"]
+build-backend = "setuptools.build_meta"
