@@ -24,7 +24,6 @@ class Matrice:
         __len__(): renvoie le nombre d'éléments dans la matrice
         __hash__(): renvoie le hash de la matrice
     méthodes:
-        adjacente(), adj(): renvoie la matrice adjacente de la matrice sous forme d'un nouvel objet
         comatrice(): renvoie la comatrice de la matrice sous forme d'un nouvel objet
         det(): renvoie le déterminant de la matrice si elle est carrée
         dimension(): renvoie les dimensions de la matrice sous forme de tuple
@@ -41,7 +40,6 @@ class Matrice:
                     print(type(el))
                     raise ValueError("The list does not only contain numbers.")
         self.matrice = tab
-        self.adj = self.adjacente
         self.inv = self.inverse
 
     def __repr__(self):
@@ -199,51 +197,12 @@ class Matrice:
     
     def __hash__(self):
         return hash((tuple(l) for l in self.matrice))
-
-    def adjacente(self):
-        """
-        Méthode permettant de renvoyer la matrice adjacente de la matrice.
-        """
-        matrice = self.comatrice()
-        for y in range(len(matrice.matrice)):
-            for x in range(len(matrice.matrice[0])):
-                matrice.matrice[x][y] *= (-1)**(x+y)
-        return matrice
-    '''
-    def comatrice(self):
-        """
-        Méthode renvoyant la comatrice de la matrice
-        """
-        if len(self.matrice) == len(self.matrice[0]) == 1:
-            return Matrice([[1]]) #Id
-        matrice = self.transpose()
-        l = matrice.l_empty()
-        for y in range(len(matrice.matrice)):
-            for x in range(len(matrice.matrice[0])):
-                l_mineure = matrice.l_empty(-1, -1)
-                for line in range(len(matrice.matrice)):
-                    for el in range(len(matrice.matrice[0])):
-                        if line != y and el != x:
-                            if line < y:
-                                if el < x:
-                                    l_mineure[line][el] = matrice.matrice[line][el]
-                                else:
-                                    l_mineure[line][el-1] = matrice.matrice[line][el]
-                            else:
-                                if el < x:
-                                    l_mineure[line-1][el] = matrice.matrice[line][el]
-                                else:
-                                    l_mineure[line-1][el-1] = matrice.matrice[line][el]
-                    
-                m_mineure=Matrice(l_mineure)
-                l[y][x]=m_mineure.det()
-        return Matrice(l)
-        '''
+        
     def cofacteur(self, i, j):
         matrice = Matrice(np.delete(np.delete(self.matrice, i, axis = 0), j, axis = 1))
         return matrice.det() * (-1)**(i+j)
 
-    def comatrice2(self):
+    def comatrice(self):
         return Matrice([[self.cofacteur(i, j) for j in  range(len(self.matrice[0]))] for i in range(len(self.matrice))])
         
     def copy(self):
@@ -325,7 +284,7 @@ class Matrice:
         d = self.det()
         if d == 0:
             raise ArithmeticError("non-invertible matrix")
-        return self.adj()*(1/d)
+        return self.transpose().comatrice()*(1/self.det())
     
     def is_squared(self) -> bool:
         d = self.dimension()
