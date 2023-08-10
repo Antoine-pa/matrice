@@ -2,7 +2,6 @@ Metadata-Version: 2.1
 Name: matrice-antoine
 Version: 1.0.0
 Summary: petite module de calcul matriciel
-Author: Antoine Pa
 Author-email: Antoine <antoine.pascal@gmx.fr>
 Classifier: Private :: Do Not Upload
 Description-Content-Type: text/markdown
