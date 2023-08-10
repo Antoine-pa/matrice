@@ -1,0 +1,12 @@
+LICENSE.txt
+README.md
+pyproject.toml
+matrice/__init__.py
+matrice/__main__.py
+matrice/matrice.py
+matrice/solveur.py
+matrice.egg-info/PKG-INFO
+matrice.egg-info/SOURCES.txt
+matrice.egg-info/dependency_links.txt
+matrice.egg-info/requires.txt
+matrice.egg-info/top_level.txt
