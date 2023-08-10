@@ -1,5 +1,5 @@
 [project]
-name = "matrice_antoine"
+name = "matrice"
 version = "1.0.0"
 description = "petite module de calcul matriciel"
 readme = "README.md"
