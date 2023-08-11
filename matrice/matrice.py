@@ -197,6 +197,13 @@ class Matrice:
     
     def __hash__(self):
         return hash((tuple(l) for l in self.matrice))
+    
+    def __round__(self, ndigits: int=0):
+        m = self.copy()
+        for i in range(len(m.matrice)):
+            for j in range(len(m.matrice[i])):
+                m[(i, j)] = round(m[(i, j)], ndigits)
+        return m
         
     def cofacteur(self, i, j):
         matrice = Matrice(np.delete(np.delete(self.matrice, i, axis = 0), j, axis = 1))
@@ -206,7 +213,7 @@ class Matrice:
         return Matrice([[self.cofacteur(i, j) for j in  range(len(self.matrice[0]))] for i in range(len(self.matrice))])
         
     def copy(self):
-        return Matrice(self.matrice)
+        return Matrice(self.matrice.copy())
 
     def det(self) -> int:
         """
@@ -323,4 +330,3 @@ class Matrice:
                 else:
                     t2[i][i2] = self.matrice[i][i2] - other.matrice[i][i2]
         return Matrice(t2)
-    
